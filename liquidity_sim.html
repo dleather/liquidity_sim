@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Leather">
-<meta name="dcterms.date" content="2025-05-25">
+<meta name="dcterms.date" content="2025-05-26">
 
 <title>Liquidity Simulation Prototype</title>
 <style>
@@ -131,7 +131,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 25, 2025</p>
+      <p class="date">May 26, 2025</p>
     </div>
   </div>
   
@@ -540,7 +540,7 @@ Q_t = Q^{\text{in}}_t - P_t.
 </section>
 <section id="results-container" class="level3">
 <h3 class="anchored" data-anchor-id="results-container">3. Results Container</h3>
-<div id="cell-9" class="cell" data-execution_count="34">
+<div id="cell-9" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(frozen <span class="op">=</span> <span class="va">True</span>, slots <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimulationResults:</span>
@@ -551,7 +551,7 @@ Q_t = Q^{\text{in}}_t - P_t.
 </section>
 <section id="monte-carlo-engine" class="level3">
 <h3 class="anchored" data-anchor-id="monte-carlo-engine">4. Monte Carlo Engine</h3>
-<div id="cell-11" class="cell" data-execution_count="4">
+<div id="cell-11" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(slots <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MonteCarloEngine:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    model: <span class="st">'ModelParams'</span>                <span class="co"># ModelParams object</span></span>
@@ -603,16 +603,16 @@ Q_t = Q^{\text{in}}_t - P_t.
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="va">self</span>.model  <span class="co"># Cache model params for fast-access</span></span>
 <span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Pre-generate all random numbers</span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        s_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_s, p.sigma_s, (T, n_paths), dtype <span class="op">=</span> flt_dtype)</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        r_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_r, p.sigma_r, (T, n_paths), dtype <span class="op">=</span> flt_dtype)</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        d_all <span class="op">=</span> <span class="va">self</span>.rng.normal(p.mu_d, p.sigma_d, (T, n_paths), dtype <span class="op">=</span> flt_dtype)</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>        ret_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_ret, p.sigma_ret, (T, n_paths), dtype <span class="op">=</span> flt_dtype)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        s_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_s, p.sigma_s, (T, n_paths)).astype(flt_dtype)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        r_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_r, p.sigma_r, (T, n_paths)).astype(flt_dtype)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        d_all <span class="op">=</span> <span class="va">self</span>.rng.normal(p.mu_d, p.sigma_d, (T, n_paths)).astype(flt_dtype)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>        ret_all <span class="op">=</span> <span class="va">self</span>.rng.lognormal(p.mu_ret, p.sigma_ret, (T, n_paths)).astype(flt_dtype)</span>
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">#--------- Main Simulation Loop ----------------------------------------------------</span></span>
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Initalize state variables for all paths</span></span>
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        C <span class="op">=</span> np.zeros(n_paths, dtype <span class="op">=</span> flt_dtype)   <span class="co"># Cash balance</span></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> np.zeros(n_paths, dtype <span class="op">=</span> flt_dtype)   <span class="co"># Liquidity Buffer</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> <span class="fl">0.05</span> <span class="op">*</span> np.ones(n_paths, dtype <span class="op">=</span> flt_dtype)   <span class="co"># Liquidity Buffer</span></span>
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>        I <span class="op">=</span> nav.copy()                      <span class="co"># Illiquid assets</span></span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>        R <span class="op">=</span> np.zeros(n_paths, dtype <span class="op">=</span> flt_dtype)   <span class="co"># Revolver balance</span></span>
 <span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>        Q <span class="op">=</span> np.zeros(n_paths, dtype <span class="op">=</span> flt_dtype)   <span class="co"># Redemption Queue Size</span></span>
@@ -860,57 +860,116 @@ Q_t = Q^{\text{in}}_t - P_t.
 <span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a>        <span class="co">#-------- Return Results -----------------------------------------------------------</span></span>
 <span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> SimulationResults(panel<span class="op">=</span>panel, metrics<span class="op">=</span>metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model_params <span class="op">=</span> ModelParams(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    mu_s<span class="op">=</span><span class="fl">0.005</span>,       <span class="co"># Default was 0.02</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    sigma_s<span class="op">=</span><span class="fl">0.02</span>,     <span class="co"># Default was 0.04 (Constraint: &gt;0. Value 0.02 is OK)</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    mu_r<span class="op">=</span><span class="fl">0.01</span>,        <span class="co"># Default was 0.02</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    sigma_r<span class="op">=</span><span class="fl">0.03</span>,     <span class="co"># Default was 0.02 (Constraint: &gt;0. Value 0.03 is OK)</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    mu_d<span class="op">=</span><span class="fl">0.001</span>,       <span class="co"># Default was 0.01</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    sigma_d<span class="op">=</span><span class="fl">0.005</span>,    <span class="co"># Default was 0.02 (Constraint: &gt;0. Value 0.005 is OK)</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    mu_ret<span class="op">=</span><span class="fl">0.006</span>,     <span class="co"># Default was 0.0</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    sigma_ret<span class="op">=</span><span class="fl">0.04</span>,   <span class="co"># Default was 0.04 (Constraint: &gt;0. Value 0.04 is OK)</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    r_f<span class="op">=</span><span class="fl">0.0025</span>,       <span class="co"># Default was 0.02</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    r_rev<span class="op">=</span><span class="fl">0.005</span>,      <span class="co"># Default was 0.035 (Constraint: &gt;=0. Value 0.005 is OK)</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    g_max<span class="op">=</span><span class="fl">0.05</span>,       <span class="co"># Default was 0.05 (Constraint: 0&lt;=val&lt;=1. Value 0.05 is OK)</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    r_max<span class="op">=</span><span class="fl">0.20</span>,       <span class="co"># Default was 0.15 (Constraint: 0&lt;=val&lt;=1. Value 0.20 is OK)</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    b<span class="op">=</span><span class="fl">0.10</span>,           <span class="co"># Default was 0.05 (Constraint: 0&lt;=val&lt;=1. Value 0.10 is OK)</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    h<span class="op">=</span><span class="fl">0.05</span>            <span class="co"># Default was 0.1 (Constraint: 0&lt;=val&lt;=1. Value 0.05 is OK)</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>sim_params <span class="op">=</span> SimParams(</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    n_paths<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    horizon<span class="op">=</span><span class="dv">120</span>, <span class="co"># 10 years if T is in months</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    seed<span class="op">=</span><span class="dv">42</span>,</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    float_dtype<span class="op">=</span>np.float64,</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    store_detailed_paths<span class="op">=</span><span class="va">True</span> <span class="co"># Set to False if you don't want to store all paths</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instantiate the Engine</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> MonteCarloEngine(model<span class="op">=</span>model_params, sim<span class="op">=</span>sim_params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stressful Parameter Calculation</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sigma_s_val <span class="op">=</span> <span class="fl">0.005</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sigma_r_val <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>sigma_ret_val <span class="op">=</span> <span class="fl">0.01</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>mu_s_stress <span class="op">=</span> np.log(<span class="fl">0.01</span>) <span class="op">-</span> (sigma_s_val<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>mu_r_stress <span class="op">=</span> np.log(<span class="fl">0.01</span>) <span class="op">-</span> (sigma_r_val<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>mu_ret_stress <span class="op">=</span> np.log(<span class="fl">0.009</span>) <span class="op">-</span> (sigma_ret_val<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>stress_model_params <span class="op">=</span> ModelParams(</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    mu_s<span class="op">=</span>mu_s_stress,           <span class="co"># Target E[s_t] ~0.5%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    sigma_s<span class="op">=</span>sigma_s_val,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    mu_r<span class="op">=</span>mu_r_stress,           <span class="co"># Target E[r_t] ~2.5%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    sigma_r<span class="op">=</span>sigma_r_val,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    mu_d<span class="op">=-</span><span class="fl">0.005</span>,                <span class="co"># Mean deal CF -0.5%</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    sigma_d<span class="op">=</span><span class="fl">0.03</span>,               <span class="co"># Increased deal CF volatility</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    mu_ret<span class="op">=</span>mu_ret_stress,       <span class="co"># Target E[r_perf_t] ~0.05% (very low growth from I)</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    sigma_ret<span class="op">=</span>sigma_ret_val,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    b<span class="op">=</span><span class="fl">0.03</span>,                     <span class="co"># Lower liquidity buffer target</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    r_max<span class="op">=</span><span class="fl">0.15</span>,                 <span class="co"># Revolver limit</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    g_max<span class="op">=</span><span class="fl">0.07</span>,                 <span class="co"># Higher gate payout potential</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    h<span class="op">=</span><span class="fl">0.15</span>,                     <span class="co"># Higher fire-sale haircut</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    r_rev<span class="op">=</span><span class="fl">0.0075</span>,               <span class="co"># Higher monthly revolver rate (~9% ann.)</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    r_f<span class="op">=</span><span class="fl">0.0015</span>                  <span class="co"># Lower monthly risk-free rate (~1.8% ann.)</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>sim_params <span class="op">=</span> SimParams(</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    n_paths<span class="op">=</span><span class="dv">100_000</span>, <span class="co"># Maybe start with fewer paths (e.g., 100) for faster iteration</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    horizon<span class="op">=</span><span class="dv">120</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    seed<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    float_dtype<span class="op">=</span>np.float64, <span class="co"># Or "float64" if using the fixed SimParams</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    store_detailed_paths<span class="op">=</span><span class="va">True</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> MonteCarloEngine(model<span class="op">=</span>stress_model_params, sim<span class="op">=</span>sim_params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>engine.simulate()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[6]</span><span class="ansi-green-fg">, line 1</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> <span class="ansi-yellow-bg">engine</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">simulate</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<div id="cell-13" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Run the Simulation</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Running simulation..."</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>results: SimulationResults <span class="op">=</span> engine.simulate() <span class="co"># results will be an instance of your SimulationResults class</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Simulation complete!"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Print Some Key Scalar Metrics</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">--- Key Metrics ---"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Final NAV Mean: </span><span class="sc">{</span>results<span class="sc">.</span>metrics<span class="sc">.</span>get(<span class="st">'final_nav_mean'</span>, <span class="st">'N/A'</span>)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Insolvency Probability: </span><span class="sc">{</span>results<span class="sc">.</span>metrics<span class="sc">.</span>get(<span class="st">'insolvency_prob'</span>, <span class="st">'N/A'</span>)<span class="sc">:.4%}</span><span class="ss">"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average Time to Insolvency (if any): </span><span class="sc">{</span>results<span class="sc">.</span>metrics<span class="sc">.</span>get(<span class="st">'avg_time_to_insolvency'</span>, <span class="st">'N/A'</span>)<span class="sc">}</span><span class="ss">"</span>) <span class="co"># Will be NaN if none</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Fire Sale Probability: </span><span class="sc">{</span>results<span class="sc">.</span>metrics<span class="sc">.</span>get(<span class="st">'fire_sale_prob'</span>, <span class="st">'N/A'</span>)<span class="sc">:.4%}</span><span class="ss">"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ... (print other metrics as needed) ...</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Visualize NAV Paths (if detailed paths were stored)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> sim_params.store_detailed_paths <span class="kw">and</span> <span class="kw">not</span> results.panel.empty:</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Visualizing NAV paths..."</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    nav_paths <span class="op">=</span> results.panel[<span class="st">'NAV'</span>].unstack(level<span class="op">=</span><span class="st">'path'</span>) <span class="co"># Panel index: (time, path)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    paths_to_plot <span class="op">=</span> <span class="bu">min</span>(<span class="dv">1_000</span>, sim_params.n_paths)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> paths_to_plot <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        nav_paths.iloc[:, :paths_to_plot].plot(legend<span class="op">=</span><span class="va">False</span>, alpha<span class="op">=</span><span class="fl">0.15</span>, ax<span class="op">=</span>plt.gca(), linewidth<span class="op">=</span><span class="fl">0.5</span>) <span class="co"># Thinner, more transparent</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sim_params.n_paths <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        mean_nav <span class="op">=</span> nav_paths.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        median_nav <span class="op">=</span> nav_paths.median(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        p05_nav <span class="op">=</span> nav_paths.quantile(<span class="fl">0.05</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        p95_nav <span class="op">=</span> nav_paths.quantile(<span class="fl">0.95</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        mean_nav.plot(color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Mean NAV'</span>, ax<span class="op">=</span>plt.gca())</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        median_nav.plot(color<span class="op">=</span><span class="st">'blue'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, linestyle<span class="op">=</span><span class="st">':'</span>, label<span class="op">=</span><span class="st">'Median NAV'</span>, ax<span class="op">=</span>plt.gca())</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        plt.fill_between(nav_paths.index, p05_nav, p95_nav, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="st">'5th-95th Percentile'</span>)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'Simulated NAV Paths (Mean, Median, Percentiles, and up to </span><span class="sc">{</span>paths_to_plot<span class="sc">}</span><span class="ss"> sample paths)'</span>)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'Time Period (t)'</span>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'Net Asset Value (NAV)'</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">':'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> sim_params.store_detailed_paths:</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Detailed paths were set to be stored, but the results panel is empty."</span>)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Detailed paths were not stored (store_detailed_paths=False). Cannot plot NAV paths."</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">--- End of Snippet ---"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running simulation...
+Simulation complete!
 
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[4]</span><span class="ansi-green-fg">, line 40</span>, in <span class="ansi-cyan-fg">MonteCarloEngine.simulate</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-fg">     38</span> path_data_collectors = {}
-<span class="ansi-green-fg">     39</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> store_detailed_paths:
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">40</span>     <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">vars_to_store_for_panel</span> = [
-<span class="ansi-green-fg">     41</span>         <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">NAV</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">C</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">B</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">I</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">R</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">Q</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">P</span><span class="ansi-yellow-fg">'</span>, 
-<span class="ansi-green-fg">     42</span>         <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">FireSaleHit</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">RevolverDraw</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">LiquidityDraw</span><span class="ansi-yellow-fg">'</span>, 
-<span class="ansi-green-fg">     43</span>         <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">Gated</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">Drawdown</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">BufferRatio</span><span class="ansi-yellow-fg">'</span>, <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">IlliquidRatio</span><span class="ansi-yellow-fg">'</span>
-<span class="ansi-green-fg">     44</span>     ]
-<span class="ansi-green-fg">     45</span>     <span style="font-style:italic;color:rgb(95,135,135)"># Each will store a list of (n_paths,) arrays</span>
-<span class="ansi-green-fg">     46</span>     <span style="font-weight:bold;color:rgb(0,135,0)">for</span> var_name <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">self</span>.vars_to_store_for_panel:
+--- Key Metrics ---
+Final NAV Mean: 1.5299
+Insolvency Probability: 0.0000%
+Average Time to Insolvency (if any): nan
+Fire Sale Probability: 99.8960%
 
-<span class="ansi-red-fg">AttributeError</span>: 'MonteCarloEngine' object has no attribute 'vars_to_store_for_panel'</pre>
+Visualizing NAV paths...</code></pre>
 </div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="liquidity_sim_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+--- End of Snippet ---</code></pre>
 </div>
 </div>
 </section>
