@@ -1,6 +1,9 @@
 # Liquidity Simulation Prototype
 
-A sophisticated simulation model for analyzing liquidity dynamics in evergreen-style private equity funds.
+A sophisticated Monte Carlo simulation engine for analyzing liquidity dynamics and risk management in evergreen private equity funds and semi-liquid alternative investment vehicles. [Link to Jupyter Notebook.](liquidity_sim.ipynb) 
+
+![Code Architecture Diagram](assets/code_diagram.svg)
+
 
 ## Overview
 
@@ -24,19 +27,22 @@ This project implements a Monte Carlo simulation to model and analyze the liquid
 
 ### State Variables
 - Cash in operating account
-- Liquid buffer (T-bills/money-market)
+- Liquid sleeve (T-bills/money-market)
 - Illiquid assets
 - Net Asset Value (NAV)
 - Revolver balance
 - Redemption queue
-- Target liquid capital
-- Revolver limit
+- Liquidity sleeve target
+- Revolver gate limit
 
 ### Stochastic Processes
 The model incorporates several stochastic processes using appropriate distributions:
 - LogNormal distributions for subscriptions and redemptions
 - Normal distribution for net deal cash flows
 - LogNormal distribution for illiquid returns
+
+Future extensions choose more flexible statistical distributions, potentially driven
+by another system (Macroeconomy -> Market Factors -> Fund Flows -> Fund Waterfall Dynamics)
 
 ## Getting Started
 
@@ -48,13 +54,13 @@ The model incorporates several stochastic processes using appropriate distributi
 ### Installation
 1. Clone this repository
 2. Install required dependencies
-3. Open `liquidity_sim.ipynb` in Jupyter Notebook
+3. Open [liquidity_sim.ipynb](liquidity_sim.ipynb) in Jupyter Notebook
 
 ## Usage
 
-The simulation is implemented in a Jupyter notebook (`liquidity_sim.ipynb`). The notebook contains:
+The simulation is implemented in a Jupyter notebook ([liquidity_sim.ipynb](liquidity_sim.ipynb)). The notebook contains:
 - Detailed model documentation
-- Implementation of the simulation logic
+- Implementation of the simulation logic using Pydantic for data validation
 - Visualization of results
 - Analysis of key metrics
 
