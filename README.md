@@ -1,4 +1,4 @@
-# Liquidity Simulation Prototype
+# Evergreen Fund Liquidity Simulation Prototype
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dleather/liquidity_sim/blob/main/liquidity_sim.ipynb)
 
 A sophisticated Monte Carlo simulation engine for analyzing liquidity dynamics and risk management in evergreen private equity funds and semi-liquid alternative investment vehicles. For model and code see [notebook](liquidity_sim.ipynb).
