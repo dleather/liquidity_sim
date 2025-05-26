@@ -1,0 +1,210 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 18px sans-serif; fill: #2c3e50; }
+      .subtitle { font: bold 14px sans-serif; fill: #34495e; }
+      .label { font: 12px sans-serif; fill: #2c3e50; }
+      .small-label { font: 10px sans-serif; fill: #7f8c8d; }
+      .header-box { fill: #3498db; stroke: #2980b9; stroke-width: 2; rx: 8; }
+      .param-box { fill: #e8f4fd; stroke: #3498db; stroke-width: 1.5; rx: 6; }
+      .process-box { fill: #fff2e6; stroke: #f39c12; stroke-width: 1.5; rx: 6; }
+      .state-box { fill: #e8f6f3; stroke: #16a085; stroke-width: 1.5; rx: 6; }
+      .output-box { fill: #fdf2e9; stroke: #e67e22; stroke-width: 1.5; rx: 6; }
+      .flow-arrow { stroke: #34495e; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .data-arrow { stroke: #e74c3c; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="25" text-anchor="middle" class="title">Monte Carlo Fund Simulation Model</text>
+  
+  <!-- Input Parameters Section -->
+  <rect x="20" y="50" width="280" height="30" class="header-box"/>
+  <text x="160" y="70" text-anchor="middle" fill="white" class="subtitle">Input Parameters</text>
+  
+  <!-- ModelParams -->
+  <rect x="30" y="90" width="120" height="140" class="param-box"/>
+  <text x="90" y="110" text-anchor="middle" class="subtitle">ModelParams</text>
+  <text x="35" y="125" class="small-label">Flow Parameters:</text>
+  <text x="35" y="138" class="small-label">• μ_s, σ_s (subscriptions)</text>
+  <text x="35" y="151" class="small-label">• μ_r, σ_r (redemptions)</text>
+  <text x="35" y="164" class="small-label">• μ_d, σ_d (deal flows)</text>
+  <text x="35" y="177" class="small-label">• μ_ret, σ_ret (returns)</text>
+  <text x="35" y="195" class="small-label">Policy Parameters:</text>
+  <text x="35" y="208" class="small-label">• b (buffer target)</text>
+  <text x="35" y="221" class="small-label">• r_max, g_max, h, r_rev</text>
+  
+  <!-- SimParams -->
+  <rect x="170" y="90" width="120" height="140" class="param-box"/>
+  <text x="230" y="110" text-anchor="middle" class="subtitle">SimParams</text>
+  <text x="175" y="130" class="small-label">• n_paths (simulations)</text>
+  <text x="175" y="145" class="small-label">• horizon (time periods)</text>
+  <text x="175" y="160" class="small-label">• seed (random seed)</text>
+  <text x="175" y="175" class="small-label">• float_dtype</text>
+  <text x="175" y="190" class="small-label">• store_detailed_paths</text>
+  
+  <!-- Main Engine Section -->
+  <rect x="350" y="50" width="500" height="30" class="header-box"/>
+  <text x="600" y="70" text-anchor="middle" fill="white" class="subtitle">Monte Carlo Engine</text>
+  
+  <!-- Initialization -->
+  <rect x="360" y="90" width="150" height="80" class="process-box"/>
+  <text x="435" y="110" text-anchor="middle" class="subtitle">Initialization</text>
+  <text x="365" y="125" class="small-label">• Pre-generate random shocks</text>
+  <text x="365" y="138" class="small-label">• Initialize state variables</text>
+  <text x="365" y="151" class="small-label">• Setup tracking arrays</text>
+  <text x="365" y="164" class="small-label">• Prepare data collectors</text>
+  
+  <!-- State Variables -->
+  <rect x="540" y="90" width="150" height="80" class="state-box"/>
+  <text x="615" y="110" text-anchor="middle" class="subtitle">State Variables</text>
+  <text x="545" y="125" class="small-label">• NAV (Net Asset Value)</text>
+  <text x="545" y="138" class="small-label">• C (Cash), B (Buffer)</text>
+  <text x="545" y="151" class="small-label">• I (Illiquid Assets)</text>
+  <text x="545" y="164" class="small-label">• R (Revolver), Q (Queue)</text>
+  
+  <!-- Time Loop -->
+  <rect x="720" y="90" width="120" height="80" class="process-box"/>
+  <text x="780" y="110" text-anchor="middle" class="subtitle">Time Loop</text>
+  <text x="780" y="130" text-anchor="middle" class="label">(t = 1 to T)</text>
+  <text x="725" y="145" class="small-label">For each period:</text>
+  <text x="725" y="158" class="small-label">Process shocks &amp;</text>
+  <text x="725" y="171" class="small-label">execute waterfall</text>
+  
+  <!-- Period Processing Steps -->
+  <rect x="360" y="200" width="480" height="280" class="process-box"/>
+  <text x="600" y="220" text-anchor="middle" class="subtitle">Period Processing (Per Time Step)</text>
+  
+  <!-- Step 1 -->
+  <rect x="370" y="235" width="140" height="45" class="state-box"/>
+  <text x="440" y="252" text-anchor="middle" class="label">1. Extract Shocks</text>
+  <text x="375" y="268" class="small-label">s_t, r_t, d_t, ret_t</text>
+  
+  <!-- Step 2 -->
+  <rect x="525" y="235" width="140" height="45" class="state-box"/>
+  <text x="595" y="252" text-anchor="middle" class="label">2. Asset Performance</text>
+  <text x="530" y="268" class="small-label">I_perf, B_perf, R_post</text>
+  
+  <!-- Step 3 -->
+  <rect x="680" y="235" width="140" height="45" class="state-box"/>
+  <text x="750" y="252" text-anchor="middle" class="label">3. Cash Inflows</text>
+  <text x="685" y="268" class="small-label">C_inflow = C + (s+d)*NAV</text>
+  
+  <!-- Step 4 -->
+  <rect x="370" y="295" width="140" height="45" class="state-box"/>
+  <text x="440" y="312" text-anchor="middle" class="label">4. Queue &amp; Gating</text>
+  <text x="375" y="328" class="small-label">Q_in, P_target</text>
+  
+  <!-- Step 5 - Cash Flow Waterfall -->
+  <rect x="525" y="295" width="295" height="75" class="process-box"/>
+  <text x="672" y="315" text-anchor="middle" class="subtitle">5. Cash Flow Waterfall</text>
+  <text x="530" y="330" class="small-label">Tranche 1: Revolver (pay down / draw)</text>
+  <text x="530" y="343" class="small-label">Tranche 2: Liquidity Buffer (top-off / draw)</text>
+  <text x="530" y="356" class="small-label">Tranche 3: Investment / Fire Sale</text>
+  
+  <!-- Step 6 -->
+  <rect x="370" y="385" width="140" height="45" class="state-box"/>
+  <text x="440" y="402" text-anchor="middle" class="label">6. Update Queue</text>
+  <text x="375" y="418" class="small-label">Q = Q_in - P_actual</text>
+  
+  <!-- Step 7 -->
+  <rect x="525" y="385" width="140" height="45" class="state-box"/>
+  <text x="595" y="402" text-anchor="middle" class="label">7. Check Insolvency</text>
+  <text x="530" y="418" class="small-label">Flag inactive paths</text>
+  
+  <!-- Step 8 -->
+  <rect x="680" y="385" width="140" height="45" class="state-box"/>
+  <text x="750" y="402" text-anchor="middle" class="label">8. Update NAV</text>
+  <text x="685" y="418" class="small-label">NAV = C + B + I - R</text>
+  
+  <!-- Step 9 -->
+  <rect x="370" y="440" width="200" height="30" class="state-box"/>
+  <text x="470" y="458" text-anchor="middle" class="label">9. Track Metrics &amp; Store Paths</text>
+  
+  <!-- Step 10 -->
+  <rect x="590" y="440" width="230" height="30" class="state-box"/>
+  <text x="705" y="458" text-anchor="middle" class="label">10. Continue to Next Period</text>
+  
+  <!-- Output Section -->
+  <rect x="900" y="50" width="280" height="30" class="header-box"/>
+  <text x="1040" y="70" text-anchor="middle" fill="white" class="subtitle">Simulation Results</text>
+  
+  <!-- Metrics -->
+  <rect x="910" y="90" width="130" height="200" class="output-box"/>
+  <text x="975" y="110" text-anchor="middle" class="subtitle">Metrics</text>
+  <text x="915" y="125" class="small-label">NAV Statistics:</text>
+  <text x="915" y="138" class="small-label">• mean, std, percentiles</text>
+  <text x="915" y="155" class="small-label">Liquidity Risk:</text>
+  <text x="915" y="168" class="small-label">• max revolver usage</text>
+  <text x="915" y="181" class="small-label">• buffer breaches</text>
+  <text x="915" y="198" class="small-label">Redemption Risk:</text>
+  <text x="915" y="211" class="small-label">• queue metrics</text>
+  <text x="915" y="224" class="small-label">• gating periods</text>
+  <text x="915" y="241" class="small-label">Fire Sale &amp; Stress:</text>
+  <text x="915" y="254" class="small-label">• fire sale prob/losses</text>
+  <text x="915" y="267" class="small-label">• drawdowns</text>
+  <text x="915" y="280" class="small-label">• insolvency metrics</text>
+  
+  <!-- Panel Data -->
+  <rect x="1050" y="90" width="120" height="200" class="output-box"/>
+  <text x="1110" y="110" text-anchor="middle" class="subtitle">Panel Data</text>
+  <text x="1110" y="130" text-anchor="middle" class="label">(if enabled)</text>
+  <text x="1055" y="150" class="small-label">Time series data:</text>
+  <text x="1055" y="163" class="small-label">• NAV, C, B, I, R, Q</text>
+  <text x="1055" y="176" class="small-label">• Fire sale events</text>
+  <text x="1055" y="189" class="small-label">• Revolver draws</text>
+  <text x="1055" y="202" class="small-label">• Gating periods</text>
+  <text x="1055" y="215" class="small-label">• Drawdowns</text>
+  <text x="1055" y="228" class="small-label">• Buffer ratios</text>
+  <text x="1055" y="241" class="small-label">• Illiquid ratios</text>
+  <text x="1055" y="260" class="small-label">MultiIndex:</text>
+  <text x="1055" y="273" class="small-label">(time, path)</text>
+  
+  <!-- Risk Tracking -->
+  <rect x="360" y="510" width="480" height="120" class="process-box"/>
+  <text x="600" y="530" text-anchor="middle" class="subtitle">Continuous Risk Tracking</text>
+  <text x="370" y="550" class="small-label">• Peak NAV and drawdown calculation</text>
+  <text x="370" y="565" class="small-label">• Maximum revolver utilization tracking</text>
+  <text x="370" y="580" class="small-label">• Redemption queue size monitoring</text>
+  <text x="370" y="595" class="small-label">• Consecutive gating period counting</text>
+  <text x="370" y="610" class="small-label">• Fire sale loss accumulation</text>
+  
+  <!-- Key Data Flows -->
+  <path d="M 290 160 L 350 160" class="flow-arrow"/>
+  <path d="M 510 160 L 540 160" class="flow-arrow"/>
+  <path d="M 690 160 L 720 160" class="flow-arrow"/>
+  <path d="M 600 180 L 600 200" class="flow-arrow"/>
+  <path d="M 600 480 L 600 510" class="flow-arrow"/>
+  <path d="M 840 300 L 900 200" class="flow-arrow"/>
+  
+  <!-- Loop back arrow -->
+  <path d="M 780 180 Q 850 180 850 350 Q 850 450 600 450" class="flow-arrow"/>
+  <text x="825" y="320" class="small-label">Loop for</text>
+  <text x="825" y="335" class="small-label">next period</text>
+  
+  <!-- Random number generation indicator -->
+  <rect x="50" y="650" width="200" height="80" class="param-box"/>
+  <text x="150" y="670" text-anchor="middle" class="subtitle">Random Number Generation</text>
+  <text x="55" y="690" class="small-label">Pre-generated for efficiency:</text>
+  <text x="55" y="705" class="small-label">• All subscriptions (s_all)</text>
+  <text x="55" y="718" class="small-label">• All redemptions (r_all)</text>
+  <text x="140" y="760" text-anchor="middle" class="small-label">Shape: (T, n_paths)</text>
+  
+  <path d="M 150 650 Q 150 550 400 400" class="data-arrow"/>
+  
+  <!-- Legend -->
+  <rect x="900" y="650" width="280" height="120" class="param-box"/>
+  <text x="1040" y="670" text-anchor="middle" class="subtitle">Legend</text>
+  <rect x="910" y="680" width="15" height="10" class="param-box"/>
+  <text x="935" y="690" class="small-label">Parameters &amp; Configuration</text>
+  <rect x="910" y="700" width="15" height="10" class="process-box"/>
+  <text x="935" y="710" class="small-label">Processing Steps</text>
+  <rect x="910" y="720" width="15" height="10" class="state-box"/>
+  <text x="935" y="730" class="small-label">State Variables &amp; Updates</text>
+  <rect x="910" y="740" width="15" height="10" class="output-box"/>
+  <text x="935" y="750" class="small-label">Results &amp; Outputs</text>
+  
+</svg>
