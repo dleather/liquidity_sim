@@ -75,6 +75,15 @@ The simulation is implemented in a Jupyter notebook ([liquidity_sim.ipynb](liqui
    - Revolver Debt Management
    - Liquidity Sleeve Optimization
 
+## Roadmap
+- [ ] Model fund profit structure w/ high-water mark
+- [ ] Refactor the codebase to make modular
+- [ ] Optimize for performance w/ JIT-compilation w/ PyTorch or Numba
+- [ ] Explore AD-compatability
+- [ ] Write unit-tests
+- [ ] Implement CI/CD using Github Actions
+- [ ] Write convenience functions for dashboard use
+
 ## License
 
 This project is licensed under the terms included in the LICENSE file.
